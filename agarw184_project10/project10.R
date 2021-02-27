@@ -1,0 +1,63 @@
+#Project - 10
+#Abhimanyu Agarwal, agarw184
+
+
+### Question 1
+users <- read.csv("/class/datamine/data/okcupid/filtered/users.csv")
+questions <- read.csv("/class/datamine/data/okcupid/filtered/questions.csv", sep=";")
+
+head(questions)
+#The questions dataframe stores data regarding the various questions and available options. 
+head(users)
+#The user dataframe has just captures various answers.  
+ 
+### Question 2
+grep("google", questions$text, ignore.case = T)
+questions$text[grep("google", questions$text, ignore.case = T)]
+# Question is : "Do you Google someone before a first date?"
+
+### Question 3
+questions[grep("google", questions$text, ignore.case = T),]
+
+#Table 
+prop.table(table(users$q170849, useNA = "always"))
+#Ratio is ~37% No's and 20% acceptances 
+
+#Gives percentage based on Man or Woman 
+tapply(users$q170849, users$gender2, function(x) {prop.table(table(users$q170849, useNA = "always"))})
+#The ratio is same for each gender. They are ~37% No's and only ~20% yes
+
+#Gives percetange based on Gender Orientation 
+tapply(users$q170849, users$gender_orientation, function(x) {prop.table(table(users$q170849, useNA = "always"))})
+#The ratio is same for each gender orientation. They are ~37% No's and only ~20% yes
+
+###Question 4
+
+count_words <- function(my_text) {
+  my_split_text <- unlist(strsplit(my_text, " "))
+  
+  return(length(my_split_text[my_split_text!=""]))
+}
+
+#Making the new column question_length which is put into questions 
+questions$question_length <- sapply(questions$text, count_words)
+
+###Question 5 
+number_of_options <- function(myDF) 
+{
+  table(apply(as.matrix(myDF[ ,3:6]), 1, function(x) {sum(!(x==""))}))
+}
+
+#Gives options based on the keyword list 
+keywordlist <- split(questions, questions$Keywords)
+sapply(keywordlist, number_of_options)
+
+###Question 6
+par(mfrow=c(2,3))
+sapply(tapply(users$q170849, users$gender2, function(x) {prop.table(table(users$q170849, useNA = "always"))}), pie)
+#Was just curious to see how the plot comes to be. Essentially i think visual representations are extremely important 
+#as it gives a sense of proportions effectively 
+
+## Pledge
+#By submitting this work I hereby pledge that this is my own, personal work. I've acknowledged in the designated place at the top of this file all sources that I used to complete said work, including but not limited to: online resources, books, and electronic communications. I've noted all collaboration with fellow students and/or TA's. I did not copy or plagiarize another's work.
+
