@@ -1,0 +1,142 @@
+---
+title: "Project 2 Solutions"
+output:
+  pdf_document: default
+---
+
+```{r, include=F}
+# Run this code chunk first to activate the course Python environment.
+# Do not remove this. It will not show up in your compiled PDF.
+datamine_py()
+
+# Install packages if not already installed.
+list.of.packages <- c("knitr")
+new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+if(length(new.packages)) install.packages(new.packages)
+
+# Remove ## from output.
+library(knitr)
+opts_chunk$set(comment = NA)
+```
+
+## (Abhimanyu Agarwal)
+
+## Collaborators: N/A
+## TA help: 
+## 1) Hilda Ibriga - Question 4 and 5, Helped me understanding and applying concepts in R.
+## 2) Evan Li, Cross-checked my knitted pdf to enhance result reporting professionally. 
+## Online resources used: N/A 
+
+### Question 1
+```{r}
+#Loads into dataframe called myDF
+myDF<-read.csv("/class/datamine/data/disney/metadata.csv")
+
+#Prints the first 1 line using head() just to see 
+head(myDF, n = 1) 
+
+#Note: TA suggested to print a few lines just because there are so many columns to print otherwise. 
+```
+
+### Question 2
+```{r}
+#Given code in project 
+our_vec <- myDF$WDWMAXTEMP
+
+#Prints the first value
+firstval <- our_vec[1]
+head(firstval)
+#Printed value is: 73.02
+
+#Prints the 50th value
+fiftyval <- our_vec[50]
+head(fiftyval)
+#Printed value is: 51.24
+
+#Type of a vector
+typeof(our_vec)
+#Type is "double"
+```
+
+### Question 3
+```{r}
+#First 50 values 
+first50 <- head(our_vec, n = 50)
+head(first50)
+#Prints values of first 50 elements
+
+#Last 50 values
+last50 <- tail(our_vec, n = 50)
+head(last50)
+#Prints the values of last 50 elements
+
+#Adding the two element vectors  
+mix <- first50 + last50
+head(mix)
+#Prints the values of after performing addition 
+```
+
+### Question 4
+```{r}
+#Stores the temperature values greater or equal to 80. Since our_vec is already defined 
+hot <- our_vec[our_vec >= 80]
+head(hot)
+#Prints some values
+```
+
+```{r}
+#Tells us how many elements are in hot (vector)
+length(hot)
+```
+
+```{r}
+#Sum of hot and first50
+result <- hot + first50
+```
+
+Explanantion : We get an error message that is because of the length of the two vectors is not the same. When we perform addition it adds the vectors element by element which results in a vector. Since the lengths of the two vectors here are different, we get a warning message as seen. R performs recycling on the shorter one by making the two vectors equal. This addition also results in a vector. 
+```{r}
+#prints result 
+head(result)
+```
+
+### Question 5
+```{r}
+#Plotting the values captured by the vector
+plot(our_vec, main='Max temperature Range (Degrees (F))', col='orange')
+```
+
+### Question 6
+```{r}
+#Favorite graph would be the second one. The code is below as given:
+library(ggplot2)
+library(tidyverse)
+summary_temperatures <- myDF %>%
+  select(MONTHOFYEAR,WDWMAXTEMP:WDWMEANTEMP) %>%
+  group_by(MONTHOFYEAR) %>%
+  summarise_all(mean, na.rm=T)
+ggplot(summary_temperatures, aes(x=MONTHOFYEAR)) +
+  geom_ribbon(aes(ymin = WDWMINTEMP, ymax = WDWMAXTEMP), fill = "#ceb888", alpha=.5) +
+  geom_line(aes(y = WDWMEANTEMP), col="#5D8AA8") +
+  geom_point(aes(y = WDWMEANTEMP), pch=21,fill = "#5D8AA8", size=2) +
+  theme_classic() +
+  labs(x = 'Month', y = 'Temperature', title = 'Average temperature range' ) +
+  scale_x_continuous(breaks=1:12, labels=month.abb)
+```
+
+1.    It is my favorite graphic because it is extremely detailed making it reader friendly
+      open to interpretation and does not show absurd variations. 
+      It discusses the topic of Average Temperature Range. 
+      Moreover, this plot does not convey all information properly.
+2.    It could be improvised by adding a legend, smoothing the variation 
+      could give a better sense of the Temperature Vs Month variation. 
+3.    A fascinating aspect that attracted my attention was the bell 
+      shape of the plot with the peak being at approximately 80 Degrees(F). 
+      
+Submitting deliverables: project02.RMD, project02.R and project02.pdf
+
+## Pledge
+
+By submitting this work I hereby pledge that this is my own, personal work. I've acknowledged in the designated place at the top of this file all sources that I used to complete said work, including but not limited to: online resources, books, and electronic communications. I've noted all collaboration with fellow students and/or TA's. I did not copy or plagiarize another's work.
+
+> As a Boilermaker pursuing academic excellence, I pledge to be honest and true in all that I do. Accountable together - We are Purdue.
