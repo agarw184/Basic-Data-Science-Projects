@@ -1,0 +1,122 @@
+---
+title: "Project 7 Solutions"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+
+```{r, include=F}
+# Run this code chunk first to activate the course Python environment.
+# Do not remove this. It will not show up in your compiled PDF.
+datamine_py()
+
+# Install packages if not already installed.
+list.of.packages <- c("knitr")
+new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+if(length(new.packages)) install.packages(new.packages)
+
+# Remove ## from output.
+library(knitr)
+opts_chunk$set(comment = NA)
+```
+
+## (Abhimanyu Agarwal)
+
+## Collaborators: N/A
+## TA help: 
+## 1) Melissa : Helped me go through Question 4 and 5. 
+## Online resources used: N/A 
+
+### Question 1
+```{r}
+#Loads into two distinct dataframes using read.csv()
+books <- read.csv("/class/datamine/data/goodreads/csv/goodreads_books.csv")
+authors <- read.csv("/class/datamine/data/goodreads/csv/goodreads_book_authors.csv")
+
+#Dimension for books dataframe
+dim(books)
+
+#Dimension for authors dataframe
+dim(authors)
+
+
+```
+
+### Question 2
+```{r}
+#Using the cut function to break into 4 categories 
+book_size <- cut(books$num_pages, breaks = c(0,250,500,1000,Inf), labels = c("small", "medium", "large", "huge"), include.lowest=T)
+table(book_size)
+```
+
+### Question 3
+```{r}
+#calculate the mean average_rating
+tapply(books$average_rating, book_size, mean, na.rm = T)
+
+#calculate the mean text_reviews_count
+tapply(books$text_reviews_count, book_size, mean, na.rm = T)
+
+#calculate the mean publication_year
+tapply(books$publication_year, book_size, mean, na.rm = T)
+
+#From the mean of average rating, it can be observed that the books that fall under the 'huge' 
+#category have the highest average rating compared to all other categories  
+
+#From the mean of text reviews count, it can be observed that the books that fall under the 'large' 
+#category have the highest reviews count compared to all other categories.
+
+#The average publication year shows 'huge' books were published in the early 2000's.
+#Trends probably changed towards Medium sized books around 2008's.
+
+```
+
+### Question 4
+```{r}
+#Using lapply to perform same function as we did in part - 3
+books_by_size <- split(data.frame(books$average_rating, books$text_reviews_count, books$publication_year), book_size)
+lapply(books_by_size, colMeans, na.rm=T)
+
+#Class
+class(books_by_size)
+```
+
+###Question 5
+```{r}
+en_books <- books[books$language_code %in% c("en-US", "en-CA", "en-GB", "eng", "en", "en-IN") & books$publication_year > 2000, c("author_id", "book_id", "average_rating", "description", "title", "ratings_count", "language_code", "publication_year")]
+res <- subset(books, subset=(language_code %in% c("en-US", "en-CA", "en-GB", "eng", "en", "en-IN")) & (publication_year > 2000), select=c("author_id", "book_id", "average_rating", "description", "title", "ratings_count", "language_code", "publication_year") )
+dim(en_books)  #325499 X 8
+dim(res)       #243269 X 8
+
+#Answer why dimension is different 
+#The dimensions are different because the en_books comprises of NA values which can be checked using the is.na() function.
+#These NA values arent included on the creation of the dataframe 'res' using the subset command. This is because the subset 
+#command inherently eliminates the NA values from the newly created dataframe. 
+
+```
+###Question 6
+```{r}
+mymergedDF <- merge(res, authors, by="author_id")
+dim(mymergedDF)
+```
+
+###Question 7
+```{r}
+df <- mymergedDF[mymergedDF$name == 'Bill Bryson',]
+head(df)
+dim(df) #43x12
+max(df$average_rating.x) #For the books 
+df[which.max(df$average_rating.x),]$title
+
+#I agree with "A Really Short History of Nearly Everything" to be the highest rated
+#book written by Bill Bryson as it demonstrated to have the highest average rating of 4.22. 
+#It stood up because of its rating out of all the 43 books by the author 
+```
+
+Submitting deliverables: project07.RMD, project07.R and project07.pdf
+
+## Pledge
+By submitting this work I hereby pledge that this is my own, personal work. I've acknowledged in the designated place at the top of this file all sources that I used to complete said work, including but not limited to: online resources, books, and electronic communications. I've noted all collaboration with fellow students and/or TA's. I did not copy or plagiarize another's work.
+
+> As a Boilermaker pursuing academic excellence, I pledge to be honest and true in all that I do. Accountable together - We are Purdue.
