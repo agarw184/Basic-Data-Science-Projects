@@ -1,0 +1,135 @@
+---
+title: "Project 3 Solutions"
+output:
+  pdf_document: default
+---
+
+```{r, include=F}
+# Run this code chunk first to activate the course Python environment.
+# Do not remove this. It will not show up in your compiled PDF.
+datamine_py()
+
+# Install packages if not already installed.
+list.of.packages <- c("knitr")
+new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+if(length(new.packages)) install.packages(new.packages)
+
+# Remove ## from output.
+library(knitr)
+opts_chunk$set(comment = NA)
+```
+
+## (Abhimanyu Agarwal)
+
+## Collaborators: N/A
+## TA help: 
+## 1) Melissa: Helped on understanding the which() function. 
+## Online resources used: N/A 
+
+### Question 1
+```{r}
+#Loads into dataframe called "splash_mountain" using read.csv()
+splash_mountain <-read.csv("/class/datamine/data/disney/splash_mountain.csv")
+
+#Columns/features in the dataset 
+str(splash_mountain)
+
+#Either works, just out of curiosity i used both to see the difference in the information being conveyed.
+
+#Returns the two values, the first value = rows and second value = columns:
+dim(splash_mountain)
+```
+
+### Question 2
+```{r}
+#Code to find SPOTSMIN 
+head(splash_mountain$SPOSTMIN)
+
+#Code to find SACTMIN
+head(splash_mountain$SACTMIN)
+
+#Code to estimate the mean by removing NA values 
+mean(splash_mountain$SPOSTMIN, na.rm=TRUE)
+#Obtained mean is: -71.70373
+
+#Code to estimate the standard deviation by removing NA values 
+sqrt(var(splash_mountain$SPOSTMIN, na.rm=TRUE))
+#Obtained Standard deviation is: 328.0586 
+
+#Result explanation here
+# The data set column given to us talks about wait time.
+# Waiting time expected cannot be negative quantity.
+# Mean obtained is negative, which is impossible in reality. 
+# Hence we can say that the data set comprises of large negative values 
+# or significantly small positive values 
+```
+
+### Question 3
+```{r}
+#Here we are using TRUE's and FALSE's as indexes 
+#Code to estimate the mean by removing NA values 
+mean(splash_mountain$SPOSTMIN[splash_mountain$SPOSTMIN != -999], na.rm=TRUE)
+#Newly obtained mean is: 43.3892
+
+#Code to estimate the standard deviation by removing NA values 
+sqrt(var(splash_mountain$SPOSTMIN[splash_mountain$SPOSTMIN != -999], na.rm=TRUE))
+#Newly obtained standard deviation is: 31.74894
+
+#Result explanation here
+#Yes, this solves the problem. Now that, negative value -999 has been eliminated
+#the computed mean is a positive and believable value. Earlier, when the mean 
+#was negative, it didn't make sense to have a negative mean for the wait time.
+```
+
+### Question 4
+```{r}
+#Change SPOSTMIN to posted_min_wait time
+head(splash_mountain)
+colnames(splash_mountain)[which(colnames(splash_mountain)=="SPOSTMIN")] <- "posted_min_wait_time"
+#View the name change 
+head(splash_mountain)
+
+#Change SACTMIN to actual_wait_time
+head(splash_mountain)
+colnames(splash_mountain)[which(colnames(splash_mountain)=="SACTMIN")] <- "actual_wait_time" 
+#View the name change 
+head(splash_mountain)
+```
+
+### Question 5
+```{r}
+#Loading the samedata in a dataframe "df"
+myDF <- read.csv("/class/datamine/data/disney/splash_mountain.csv")
+head(myDF)
+
+#Now using the cut() functions 
+quarter <- cut(as.Date(myDF$date, "%m/%d/%Y"), "quarter")
+
+#Estimating the possible combinations 
+nlevels(quarter)
+#There are 20 quarters as we can see.
+
+#Using factor() function we put labels like "q1", "q2"...etc 
+levels(quarter) <- factor(paste0("q", 1:nlevels(quarter)))
+
+#Now we add a new column called "quarter" 
+myDF$quarter<-quarter
+
+#Now we check and observe that there is indeed a new column by the name "quarter"
+head(myDF)
+tail(myDF)
+
+```
+
+### Question 6
+```{r}
+#Including the statement 
+cat ("I acknowledge that the STAT 19000/29000/39000 1-credit Data Mine seminar will be recorded and posted on Piazza, for participants in this course.")
+```      
+
+Submitting deliverables: project03.RMD, project03.R and project03.pdf
+
+## Pledge
+By submitting this work I hereby pledge that this is my own, personal work. I've acknowledged in the designated place at the top of this file all sources that I used to complete said work, including but not limited to: online resources, books, and electronic communications. I've noted all collaboration with fellow students and/or TA's. I did not copy or plagiarize another's work.
+
+> As a Boilermaker pursuing academic excellence, I pledge to be honest and true in all that I do. Accountable together - We are Purdue.
