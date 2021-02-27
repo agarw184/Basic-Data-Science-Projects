@@ -1,0 +1,100 @@
+---
+title: "Project 1 Solutions"
+output:
+  pdf_document: default
+---
+
+```{r, include=F}
+# Run this code chunk first to activate the course Python environment.
+# Do not remove this. It will not show up in your compiled PDF.
+datamine_py()
+
+# Install packages if not already installed.
+list.of.packages <- c("knitr")
+new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+if(length(new.packages)) install.packages(new.packages)
+
+# Remove ## from output.
+library(knitr)
+opts_chunk$set(comment = NA)
+```
+
+## (Abhimanyu Agarwal)
+
+## Collaborators: N/A
+## TA help: 
+## 1) Kim, Question 6, Helped me in understanding the paste() in R.
+## 2) Hanwen Gu, Question 6, Helped me re-structure my answer to demonstrate understanding.
+## Online resources used: N/A 
+
+### Question 1
+
+The memory on the 7 frontend nodes is: 4 * 512 + 3 * 768 = 4352 GB = 4.3 TB and 4 * 20 + 3 * 20 = 140 cores. 
+
+The memory on the 28 nodes in the sub-cluster is: 24 * 64 + 4 * 192 = 2304 GB = 2.3 TB and 24 * 20 + 4 * 16 = 544 cores.
+
+The memory on Abhimanyu's laptop is 8 GB and 4 cores.
+
+### Question 2
+
+The node we are working on is:
+
+```{r}
+system("hostname", intern=T)
+```
+We are working on Scholar front end number 03. 
+
+### Question 3
+
+Printed Message Sentence: "You've successfully loaded The Data Mine R settings!"
+
+### Question 4
+
+There are 3 chunks of R code, 1 chunk of Python, 1 chunk of Bash and 1 chunk of SQL.
+
+### Question 5
+
+Basically 1,2 and 3 are stored into a variable called "my_variable".
+
+```{r}
+my_variable <- c(1,2,3)
+my_variable
+```
+
+The displayed output is: 1 2 3
+
+### Question 6
+
+Referring back to question 1, we can perform the following arithmetic calculations: 
+
+Memory (GB) and Core (Number of Core units) calculations using R for 7 front end respectively:
+```{r}
+4 * 512 + 3 * 768
+4 * 20 + 3 * 20
+
+```
+
+Memory (GB) and Core (Number of Core units) calculations using R for 28 sub-clusters respectively:
+```{r}
+24 * 64 + 4 * 192 
+24 * 20 + 4 * 16
+```
+
+### Question 7
+
+We load in given dataset as follows:
+
+```{r}
+dat <- read.csv("/class/datamine/data/disney/splash_mountain.csv")
+head(dat)
+```
+
+### Question 8
+
+Submitting deliverable: project01.RMD, project01.R and project01.pdf
+
+## Pledge
+
+By submitting this work I hereby pledge that this is my own, personal work. I've acknowledged in the designated place at the top of this file all sources that I used to complete said work, including but not limited to: online resources, books, and electronic communications. I've noted all collaboration with fellow students and/or TA's. I did not copy or plagiarize another's work.
+
+> As a Boilermaker pursuing academic excellence, I pledge to be honest and true in all that I do. Accountable together - We are Purdue.
